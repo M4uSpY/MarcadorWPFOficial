@@ -76,6 +76,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="DTOs\AsistenciaCrearDTO.cs" />
+    <Compile Include="DTOs\AsistenciaRegistrarResultadoDTO.cs" />
     <Compile Include="DTOs\HuellaRespuesta.cs" />
     <Compile Include="DTOs\HuellaRespuestaDTO.cs" />
     <Compile Include="Services\ApiClient.cs" />

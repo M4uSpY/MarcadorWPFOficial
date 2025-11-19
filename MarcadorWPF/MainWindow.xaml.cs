@@ -197,22 +197,42 @@ namespace MarcadorWPF
                                 });
 
                                 // 3️⃣ Llamada a la API FUERA del Dispatcher
-                                var ok = await _apiClient.CrearAsistenciaAsync(asistencia);
+                                var resultado = await _apiClient.CrearAsistenciaAsync(asistencia);
 
-                                if (!ok)
+                                if (resultado == null || !resultado.Registrado)
                                 {
-                                    Log("❌ Error al registrar asistencia en la API.");
+                                    Log(resultado?.Mensaje ?? "❌ Error al registrar asistencia en la API.");
                                 }
                                 else
                                 {
-                                    Log("✅ Asistencia registrada exitosamente.");
-                                }
+                                    // Actualizar Tipo ENTRADA/SALIDA y color
+                                    await Application.Current.Dispatcher.InvokeAsync(() =>
+                                    {
+                                        if (resultado.EsEntrada)
+                                        {
+                                            txtTipoMarcacion.Text = "ENTRADA";
+                                            txtTipoMarcacion.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0x0C, 0xC7, 0x69)); // verde
+                                        }
+                                        else
+                                        {
+                                            txtTipoMarcacion.Text = "SALIDA";
+                                            txtTipoMarcacion.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0xFF, 0x4B, 0x5C)); // rojo
+                                        }
+                                    });
 
+                                    if (resultado.FaltaGenerada)
+                                    {
+                                        Log($"⚠ {resultado.Mensaje}");
+                                    }
+                                    else
+                                    {
+                                        Log($"✅ {resultado.Mensaje}");
+                                    }
+                                }
                                 break;
                             }
 
                         }
-
                         else
                         {
                             Log($"Error comparando huella IdPersona={h.IdPersona}: {cmp.ResultCode}");

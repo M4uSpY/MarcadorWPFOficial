@@ -34,29 +34,44 @@
                     Margin="0,40,0,0"
                     HorizontalAlignment="Center"
                     Orientation="Vertical">
-                    <TextBox
-                        x:Name="txtLog"
+                    <Border
                         Width="218"
-                        Height="35"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        HorizontalContentAlignment="Center"
-                        VerticalContentAlignment="Center"
+                        Height="45"
                         Background="#28A745"
-                        FontSize="16"
-                        Foreground="White"
-                        Text="Esperando huella..." />
+                        CornerRadius="8">
+                        <TextBox
+                            x:Name="txtLog"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            HorizontalContentAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            FontSize="16"
+                            Foreground="White"
+                            Text="Esperando huella..." />
+                    </Border>
+
                     <Button
                         x:Name="btnLector"
                         Width="218"
-                        Height="35"
+                        Height="45"
                         Margin="0,20,0,0"
-                        Background="#02528A"
-                        BorderBrush="Transparent"
-                        BorderThickness="0"
                         Content="LECTOR INACTIVO"
                         FontSize="20"
-                        Foreground="White" />
+                        Foreground="White">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border
+                                    Padding="5"
+                                    Background="#02528A"
+                                    CornerRadius="8">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+
                 </StackPanel>
                 <StackPanel
                     Margin="0,40,0,0"
@@ -118,7 +133,7 @@
                     Padding="14"
                     BorderBrush="#9EA7AE"
                     BorderThickness="1"
-                    CornerRadius="10">
+                    CornerRadius="8">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -238,7 +253,7 @@
                                 Text="Hora Registrada" />
                         </StackPanel>
 
-                        <!--  FILA 3: Tipo (ENTRADA / SALIDA)  -->
+                        <!--  FILA 3: Tipo (ENTRADA / SALIDA) dinámico  -->
                         <StackPanel
                             Grid.Row="3"
                             Grid.ColumnSpan="2"
@@ -251,14 +266,12 @@
                                 Foreground="#CCCCCC"
                                 Text="Tipo:" />
                             <TextBlock Width="8" />
-                            <!--  Usamos Inlines para colorear solo partes del texto  -->
-                            <TextBlock FontSize="16" FontWeight="Bold">
-                                <Run Foreground="#0CC769" Text="ENTRADA" />
-                                <!--  verde  -->
-                                <Run Text=" " />
-                                <Run Foreground="#FF4B5C" Text="SALIDA" />
-                                <!--  rojo  -->
-                            </TextBlock>
+                            <TextBlock
+                                x:Name="txtTipoMarcacion"
+                                FontSize="18"
+                                FontWeight="Bold"
+                                Foreground="#0CC769"
+                                Text="-" />
                         </StackPanel>
                     </Grid>
                 </Border>
