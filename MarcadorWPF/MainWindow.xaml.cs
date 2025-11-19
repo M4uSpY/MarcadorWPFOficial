@@ -1,9 +1,11 @@
 ﻿using DPUruNet;
+using MarcadorWPF.DTOs;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Globalization;
 using System.IO;
 using System.Net.Http;
 using System.Runtime.InteropServices;
@@ -12,11 +14,15 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
+
+
 
 namespace MarcadorWPF
 {
     public partial class MainWindow : Window
     {
+        private DispatcherTimer _timer;
         private const int DPFJ_PROBABILITY_ONE = 0x7fffffff;
         private Reader _reader = null;
         private Fmd _ultimoTemplate;
@@ -29,14 +35,26 @@ namespace MarcadorWPF
         {
             InitializeComponent();
             _httpClient = new HttpClient();
+            txtFechaActual.Text = DateTime.Now.ToString("dddd, d 'de' MMMM 'de' yyyy",
+        new System.Globalization.CultureInfo("es-ES"));
+            // Mostrar la hora inmediatamente al iniciar
+            ActualizarHora();
+
+            // Iniciar temporizador para actualizar cada segundo
+            _timer = new DispatcherTimer();
+            _timer.Interval = TimeSpan.FromSeconds(1);
+            _timer.Tick += (s, ev) => ActualizarHora();
+            _timer.Start();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            Log("Iniciando aplicacion...");
             RefreshReaders();
         }
-
+        private void ActualizarHora()
+        {
+            txtHoraActual.Text = DateTime.Now.ToString("hh:mm tt", CultureInfo.InvariantCulture);
+        }
         private void RefreshReaders()
         {
             try
@@ -61,8 +79,9 @@ namespace MarcadorWPF
                     Constants.CaptureProcessing.DP_IMG_PROC_DEFAULT,
                     _reader.Capabilities.Resolutions[0]);
 
-                Log("Lector abierto: " + _reader.Description.SerialNumber);
-                Log("Captura automática iniciada. Coloca el dedo en el lector...");
+                btnLector.Content = "LECTOR ACTIVO";
+                //Log("Lector abierto: " + _reader.Description.SerialNumber);
+                //Log("Captura automática iniciada. Coloca el dedo en el lector...");
             }
             catch (Exception ex)
             {
@@ -133,10 +152,42 @@ namespace MarcadorWPF
                             if (match)
                             {
                                 matchFound = true;
-                                Log($"✅ Huella identificada: IdPersona={h.IdPersona} → {h.PrimerNombre} {h.SegundoNombre} {h.ApellidoPaterno} {h.ApellidoMaterno} → score={cmp.Score}");
+
+                                Log($"✅ Huella identificada");
+
+                                // 🔹 Actualizamos los TextBox desde el hilo de la UI
+                                Application.Current.Dispatcher.Invoke(() =>
+                                {
+                                    
+                                    if (h.Foto != null && h.Foto.Length > 0)
+                                    {
+                                        BitmapImage bitmap = new BitmapImage();
+                                        using (MemoryStream ms = new MemoryStream(h.Foto))
+                                        {
+                                            bitmap.BeginInit();
+                                            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                                            bitmap.StreamSource = ms;
+                                            bitmap.EndInit();
+                                            bitmap.Freeze(); // Esto es importante si vas a usarlo desde un hilo distinto al UI
+                                        }
+
+                                        imgPersona.Source = bitmap; // imgPersona es tu Image control
+                                    }
+                                    else
+                                    {
+                                        imgPersona.Source = null; // o una imagen por defecto
+                                    }
+                                    txtNombreCompleto.Text = $"{h.PrimerNombre} {h.ApellidoPaterno}";
+                                    txtCarnetIdentidad.Text = h.CI;
+                                    txtFechaRegistrada.Text = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
+                                    txtCargo.Text = h.Cargo;
+                                    txtHoraRegistrada.Text = DateTime.Now.ToString("hh:mm tt", CultureInfo.InvariantCulture);
+                                });
+
                                 break;
                             }
                         }
+
                         else
                         {
                             Log($"Error comparando huella IdPersona={h.IdPersona}: {cmp.ResultCode}");
@@ -210,19 +261,9 @@ namespace MarcadorWPF
         {
             Dispatcher.Invoke(() =>
             {
-                txtLog.AppendText($"[{DateTime.Now:HH:mm:ss}] {msg}\r\n");
-                txtLog.ScrollToEnd();
+                txtLog.Text = msg;
             });
         }
-        // DTO para deserializar JSON de la API
-        public class HuellaRespuestaDTO
-        {
-            public int IdPersona { get; set; }
-            public string PrimerNombre { get; set; } = string.Empty;
-            public string SegundoNombre { get; set; } = string.Empty;
-            public string ApellidoPaterno { get; set; } = string.Empty;
-            public string ApellidoMaterno { get; set; } = string.Empty;
-            public string TemplateXml { get; set; } = string.Empty; // XML del template
-        }
+        
     }
 }

@@ -75,6 +75,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DTOs\HuellaRespuesta.cs" />
+    <Compile Include="DTOs\HuellaRespuestaDTO.cs" />
     <Compile Include="Services\ApiClient.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -86,7 +88,6 @@
     </Compile>
     <Compile Include="DTOs\HuellaIdentificarDTO.cs" />
     <Compile Include="DTOs\HuellaRegistrarDTO.cs" />
-    <Compile Include="DTOs\HuellaRespuestaDTO.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -118,6 +119,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\iconSoft.png" />
+    <Resource Include="Images\Logo_Cooperativa.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\sujeto.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
