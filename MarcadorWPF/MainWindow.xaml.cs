@@ -1,5 +1,6 @@
 ﻿using DPUruNet;
 using MarcadorWPF.DTOs;
+using MarcadorWPF.Services;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,7 @@ namespace MarcadorWPF
         private Reader _reader = null;
         private Fmd _ultimoTemplate;
         private HttpClient _httpClient;
+        private readonly ApiClient _apiClient;
 
         // Umbral típico de aceptación
         private readonly int _targetFmr = DPFJ_PROBABILITY_ONE / 100000;
@@ -34,6 +36,7 @@ namespace MarcadorWPF
         public MainWindow()
         {
             InitializeComponent();
+            _apiClient = new ApiClient("https://localhost:7084/");
             _httpClient = new HttpClient();
             txtFechaActual.Text = DateTime.Now.ToString("dddd, d 'de' MMMM 'de' yyyy",
         new System.Globalization.CultureInfo("es-ES"));
@@ -155,37 +158,59 @@ namespace MarcadorWPF
 
                                 Log($"✅ Huella identificada");
 
-                                // 🔹 Actualizamos los TextBox desde el hilo de la UI
-                                Application.Current.Dispatcher.Invoke(() =>
-                                {
-                                    
-                                    if (h.Foto != null && h.Foto.Length > 0)
-                                    {
-                                        BitmapImage bitmap = new BitmapImage();
-                                        using (MemoryStream ms = new MemoryStream(h.Foto))
-                                        {
-                                            bitmap.BeginInit();
-                                            bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                                            bitmap.StreamSource = ms;
-                                            bitmap.EndInit();
-                                            bitmap.Freeze(); // Esto es importante si vas a usarlo desde un hilo distinto al UI
-                                        }
+                                // 1️⃣ Calculamos todo fuera del Dispatcher
+                                var ahora = DateTime.Now;
 
-                                        imgPersona.Source = bitmap; // imgPersona es tu Image control
-                                    }
-                                    else
+                                var asistencia = new AsistenciaCrearDTO
+                                {
+                                    IdTrabajador = h.IdTrabajador,
+                                    Fecha = ahora.Date,
+                                    Hora = ahora.TimeOfDay,
+                                    esEntrada = true
+                                };
+
+                                BitmapImage bitmap = null;
+                                if (h.Foto != null && h.Foto.Length > 0)
+                                {
+                                    using (MemoryStream ms = new MemoryStream(h.Foto))
                                     {
-                                        imgPersona.Source = null; // o una imagen por defecto
+                                        var tmp = new BitmapImage();
+                                        tmp.BeginInit();
+                                        tmp.CacheOption = BitmapCacheOption.OnLoad;
+                                        tmp.StreamSource = ms;
+                                        tmp.EndInit();
+                                        tmp.Freeze();              // Para que se pueda usar en otro hilo
+                                        bitmap = tmp;
                                     }
+                                }
+
+                                // 2️⃣ Dispatcher SOLO para actualizar la UI
+                                await Application.Current.Dispatcher.InvokeAsync(() =>
+                                {
+                                    imgPersona.Source = bitmap;    // Puede ser null, no hay problema
+
                                     txtNombreCompleto.Text = $"{h.PrimerNombre} {h.ApellidoPaterno}";
                                     txtCarnetIdentidad.Text = h.CI;
-                                    txtFechaRegistrada.Text = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
+                                    txtFechaRegistrada.Text = ahora.ToString("dd/MM/yyyy HH:mm:ss");
                                     txtCargo.Text = h.Cargo;
-                                    txtHoraRegistrada.Text = DateTime.Now.ToString("hh:mm tt", CultureInfo.InvariantCulture);
+                                    txtHoraRegistrada.Text = ahora.ToString("hh:mm tt", CultureInfo.InvariantCulture);
                                 });
+
+                                // 3️⃣ Llamada a la API FUERA del Dispatcher
+                                var ok = await _apiClient.CrearAsistenciaAsync(asistencia);
+
+                                if (!ok)
+                                {
+                                    Log("❌ Error al registrar asistencia en la API.");
+                                }
+                                else
+                                {
+                                    Log("✅ Asistencia registrada exitosamente.");
+                                }
 
                                 break;
                             }
+
                         }
 
                         else
