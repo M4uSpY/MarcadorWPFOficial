@@ -35,10 +35,7 @@ namespace MarcadorWPF.Services
 
             var resp = await _http.PostAsync("api/asistencias", content);
 
-            Console.WriteLine($"POST asistencia → Status: {resp.StatusCode}");
-
             string body = await resp.Content.ReadAsStringAsync();
-            Console.WriteLine($"Respuesta backend: {body}");
 
             if (!resp.IsSuccessStatusCode)
             {

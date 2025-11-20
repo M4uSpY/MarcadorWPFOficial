@@ -196,40 +196,57 @@ namespace MarcadorWPF
                                     txtHoraRegistrada.Text = ahora.ToString("hh:mm tt", CultureInfo.InvariantCulture);
                                 });
 
+
                                 // 3️⃣ Llamada a la API FUERA del Dispatcher
                                 var resultado = await _apiClient.CrearAsistenciaAsync(asistencia);
 
-                                if (resultado == null || !resultado.Registrado)
+                                if (resultado == null)
                                 {
-                                    Log(resultado?.Mensaje ?? "❌ Error al registrar asistencia en la API.");
+                                    Log("❌ Error al registrar asistencia en la API.");
                                 }
                                 else
                                 {
-                                    // Actualizar Tipo ENTRADA/SALIDA y color
                                     await Application.Current.Dispatcher.InvokeAsync(() =>
                                     {
-                                        if (resultado.EsEntrada)
+                                        switch (resultado.TipoMarcacion)
                                         {
-                                            txtTipoMarcacion.Text = "ENTRADA";
-                                            txtTipoMarcacion.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0x0C, 0xC7, 0x69)); // verde
-                                        }
-                                        else
-                                        {
-                                            txtTipoMarcacion.Text = "SALIDA";
-                                            txtTipoMarcacion.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0xFF, 0x4B, 0x5C)); // rojo
+                                            case "ENTRADA":
+                                                txtTipoMarcacion.Text = "ENTRADA";
+                                                txtTipoMarcacion.Foreground =
+                                                    new SolidColorBrush(System.Windows.Media.Color.FromRgb(0x0C, 0xC7, 0x69)); // verde
+                                                txtTiempoTrabajado.Text = "-";   // aún no hay horas trabajadas
+                                                break;
+
+                                            case "SALIDA":
+                                                txtTipoMarcacion.Text = "SALIDA";
+                                                txtTipoMarcacion.Foreground =
+                                                    new SolidColorBrush(System.Windows.Media.Color.FromRgb(0xFF, 0x4B, 0x5C)); // rojo
+                                                txtTiempoTrabajado.Text = resultado.HorasTrabajadas ?? "-";
+                                                break;
+
+                                            case "EN_PROCESO":
+                                            default:
+                                                txtTipoMarcacion.Text = "EN PROCESO";
+                                                txtTipoMarcacion.Foreground =
+                                                    new SolidColorBrush(System.Windows.Media.Color.FromRgb(0xFF, 0xC1, 0x07)); // amarillo
+                                                txtTiempoTrabajado.Text = "-";
+                                                break;
                                         }
                                     });
 
-                                    if (resultado.FaltaGenerada)
-                                    {
-                                        Log($"⚠ {resultado.Mensaje}");
-                                    }
-                                    else
+                                    // Log en el recuadro verde
+                                    if (resultado.Registrado)
                                     {
                                         Log($"✅ {resultado.Mensaje}");
                                     }
+                                    else
+                                    {
+                                        Log($"ℹ {resultado.Mensaje}");
+                                    }
                                 }
+
                                 break;
+
                             }
 
                         }

@@ -66,13 +66,16 @@
                                     Padding="5"
                                     Background="#02528A"
                                     CornerRadius="8">
-                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    <ContentPresenter
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center" />
                                 </Border>
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
 
                 </StackPanel>
+
                 <StackPanel
                     Margin="0,40,0,0"
                     HorizontalAlignment="Center"
@@ -87,7 +90,10 @@
                         Height="auto"
                         Source="/Images/iconSoft.png" />
                 </StackPanel>
-                <StackPanel Margin="10,50,0,0" HorizontalAlignment="Center">
+
+                <StackPanel
+                    Margin="10,50,0,0"
+                    HorizontalAlignment="Center">
                     <TextBlock
                         x:Name="txtFechaActual"
                         FontSize="18"
@@ -111,7 +117,9 @@
                 HorizontalAlignment="Center"
                 Background="Transparent"
                 Orientation="Vertical">
-                <StackPanel Margin="10,20,0,0" Orientation="Horizontal">
+                <StackPanel
+                    Margin="10,20,0,0"
+                    Orientation="Horizontal">
                     <Border
                         Width="230"
                         Height="230"
@@ -135,7 +143,9 @@
                     BorderThickness="1"
                     CornerRadius="8">
                     <Grid>
+                        <!--  AGREGAMOS UNA FILA MÁS  -->
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
@@ -273,6 +283,28 @@
                                 Foreground="#0CC769"
                                 Text="-" />
                         </StackPanel>
+
+                        <!--  FILA 4: Tiempo trabajado  -->
+                        <StackPanel
+                            Grid.Row="4"
+                            Grid.ColumnSpan="2"
+                            Margin="0,10,0,0"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal">
+                            <TextBlock
+                                FontSize="15"
+                                FontWeight="Bold"
+                                Foreground="#CCCCCC"
+                                Text="Tiempo trabajado:" />
+                            <TextBlock Width="8" />
+                            <TextBlock
+                                x:Name="txtTiempoTrabajado"
+                                FontSize="16"
+                                FontWeight="Bold"
+                                Foreground="White"
+                                Text="-" />
+                        </StackPanel>
+
                     </Grid>
                 </Border>
 
