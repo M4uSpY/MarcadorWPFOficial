@@ -20,7 +20,7 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="300" />
+                <ColumnDefinition Width="250" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
@@ -48,6 +48,7 @@
                             Background="Transparent"
                             BorderThickness="0"
                             FontSize="16"
+                            FontWeight="SemiBold"
                             Foreground="White"
                             Text="Esperando huella..." />
                     </Border>
@@ -59,6 +60,7 @@
                         Margin="0,20,0,0"
                         Content="LECTOR INACTIVO"
                         FontSize="20"
+                        FontWeight="SemiBold"
                         Foreground="White">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
@@ -66,9 +68,7 @@
                                     Padding="5"
                                     Background="#02528A"
                                     CornerRadius="8">
-                                    <ContentPresenter
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center" />
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                                 </Border>
                             </ControlTemplate>
                         </Button.Template>
@@ -83,17 +83,18 @@
                     <Image
                         Width="100"
                         Height="auto"
-                        Margin="0,0,20,0"
+                        Margin="0,0,5,0"
+                        RenderOptions.BitmapScalingMode="HighQuality"
                         Source="/Images/Logo_Cooperativa.png" />
                     <Image
                         Width="100"
                         Height="auto"
+                        Margin="5,0,0,0"
+                        RenderOptions.BitmapScalingMode="HighQuality"
                         Source="/Images/iconSoft.png" />
                 </StackPanel>
 
-                <StackPanel
-                    Margin="10,50,0,0"
-                    HorizontalAlignment="Center">
+                <StackPanel Margin="10,50,0,0" HorizontalAlignment="Center">
                     <TextBlock
                         x:Name="txtFechaActual"
                         FontSize="18"
@@ -117,19 +118,19 @@
                 HorizontalAlignment="Center"
                 Background="Transparent"
                 Orientation="Vertical">
-                <StackPanel
-                    Margin="10,20,0,0"
-                    Orientation="Horizontal">
+                <StackPanel Margin="10,20,0,0" Orientation="Horizontal">
                     <Border
                         Width="230"
                         Height="230"
-                        Margin="0,0,6,0">
+                        Margin="0,0,6,0"
+                        CornerRadius="10">
                         <Image x:Name="imgFinger" Margin="10" />
                     </Border>
                     <Border
                         Width="230"
                         Height="230"
-                        Margin="0,0,6,0">
+                        Margin="0,0,6,0"
+                        CornerRadius="10">
                         <Image x:Name="imgPersona" Margin="10" />
                     </Border>
                 </StackPanel>
