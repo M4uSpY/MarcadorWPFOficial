@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:MarcadorWPF"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="MainWindow"
-    Width="800"
+    Width="830"
     Height="450"
     AllowsTransparency="True"
     Background="Transparent"
@@ -16,17 +16,18 @@
     mc:Ignorable="d">
     <Border Background="#232A33" CornerRadius="10">
         <Grid>
+
+
             <Grid.RowDefinitions>
                 <RowDefinition />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="250" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="294" />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
             <!--  Lado IZQUIERDO  -->
             <StackPanel
-                Grid.Row="1"
                 Grid.Column="0"
                 Background="Transparent"
                 Orientation="Vertical">
@@ -36,22 +37,28 @@
                     Orientation="Vertical">
                     <Border
                         Width="218"
-                        Height="45"
+                        Padding="6"
                         Background="#28A745"
                         CornerRadius="8">
+
                         <TextBox
                             x:Name="txtLog"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            HorizontalContentAlignment="Center"
-                            VerticalContentAlignment="Center"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            VerticalContentAlignment="Top"
+                            AcceptsReturn="True"
                             Background="Transparent"
                             BorderThickness="0"
                             FontSize="16"
                             FontWeight="SemiBold"
                             Foreground="White"
-                            Text="Esperando huella..." />
+                            IsReadOnly="True"
+                            Text="Esperando huella..."
+                            TextWrapping="Wrap"
+                            VerticalScrollBarVisibility="Auto" />
                     </Border>
+
 
                     <Button
                         x:Name="btnLector"
@@ -83,18 +90,18 @@
                     <Image
                         Width="100"
                         Height="auto"
-                        Margin="0,0,5,0"
+                        Margin="10,0,5,0"
                         RenderOptions.BitmapScalingMode="HighQuality"
                         Source="/Images/Logo_Cooperativa.png" />
                     <Image
                         Width="100"
                         Height="auto"
-                        Margin="5,0,0,0"
+                        Margin="10,0,0,0"
                         RenderOptions.BitmapScalingMode="HighQuality"
                         Source="/Images/iconSoft.png" />
                 </StackPanel>
 
-                <StackPanel Margin="10,50,0,0" HorizontalAlignment="Center">
+                <StackPanel Margin="30,50,0,0" HorizontalAlignment="Center">
                     <TextBlock
                         x:Name="txtFechaActual"
                         FontSize="18"
@@ -103,8 +110,7 @@
                         Text="fecha" />
                     <TextBlock
                         x:Name="txtHoraActual"
-                        Height="66"
-                        FontSize="30"
+                        FontSize="25"
                         FontWeight="Bold"
                         Foreground="White"
                         Text="hora" />
@@ -113,8 +119,8 @@
 
             <!--  Lado derecho  -->
             <StackPanel
-                Grid.Row="1"
                 Grid.Column="1"
+                Width="490"
                 HorizontalAlignment="Center"
                 Background="Transparent"
                 Orientation="Vertical">
@@ -138,7 +144,7 @@
                 <Border
                     Width="487"
                     Height="160"
-                    Margin="0,10,10,0"
+                    Margin="0,10,0,0"
                     Padding="14"
                     BorderBrush="#9EA7AE"
                     BorderThickness="1"
@@ -163,7 +169,7 @@
                         <TextBlock
                             Grid.Row="0"
                             Grid.Column="0"
-                            Margin="0,10,0,0"
+                            Margin="0,5,0,0"
                             VerticalAlignment="Center"
                             FontSize="15"
                             FontWeight="Bold"
@@ -174,7 +180,7 @@
                             x:Name="txtNombreCompleto"
                             Grid.Row="0"
                             Grid.Column="1"
-                            Margin="0,10,0,0"
+                            Margin="10,0,0,0"
                             VerticalAlignment="Center"
                             FontSize="18"
                             FontWeight="Bold"
@@ -206,7 +212,7 @@
                         <StackPanel
                             Grid.Row="1"
                             Grid.Column="1"
-                            Margin="0,10,0,0"
+                            Margin="10,10,0,0"
                             VerticalAlignment="Center"
                             Orientation="Horizontal">
                             <TextBlock
@@ -247,7 +253,7 @@
                         <StackPanel
                             Grid.Row="2"
                             Grid.Column="1"
-                            Margin="0,10,0,0"
+                            Margin="10,10,0,0"
                             VerticalAlignment="Center"
                             Orientation="Horizontal">
                             <TextBlock
@@ -306,11 +312,48 @@
                                 Text="-" />
                         </StackPanel>
 
+
                     </Grid>
+
                 </Border>
 
             </StackPanel>
+            <Button
+                x:Name="btnSalir"
+                Grid.Row="0"
+                Grid.Column="1"
+                Width="25"
+                Height="25"
+                Margin="0,8,10,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Background="Transparent"
+                BorderBrush="Transparent"
+                Click="btnSalir_Click"
+                Cursor="Hand">
+
+                <!--  Template del botón con borde REDONDEADO  -->
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            Padding="2"
+                            Background="Red"
+                            BorderThickness="0"
+                            CornerRadius="8">
+
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="12"
+                                FontWeight="Bold"
+                                Foreground="White"
+                                Text="✕" />
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
 
         </Grid>
+
     </Border>
 </Window>

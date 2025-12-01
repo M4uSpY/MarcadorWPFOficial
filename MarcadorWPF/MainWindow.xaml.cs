@@ -326,6 +326,10 @@ namespace MarcadorWPF
                 txtLog.Text = msg;
             });
         }
-        
+
+        private void btnSalir_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
     }
 }
