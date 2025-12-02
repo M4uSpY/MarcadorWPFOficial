@@ -20,12 +20,16 @@ namespace MarcadorWPF.Services
             _http.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public async Task<List<HuellaRespuesta>> ListarHuellasAsync()
+        public async Task<List<HuellaRespuestaDTO>> ListarHuellasAsync()
         {
             var resp = await _http.GetAsync("api/huellas/listar");
-            resp.EnsureSuccessStatusCode();
+
+            if (!resp.IsSuccessStatusCode)
+                return new List<HuellaRespuestaDTO>();
+
             string json = await resp.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<List<HuellaRespuesta>>(json) ?? new List<HuellaRespuesta>();
+            return JsonConvert.DeserializeObject<List<HuellaRespuestaDTO>>(json)
+                   ?? new List<HuellaRespuestaDTO>();
         }
 
         public async Task<AsistenciaRegistrarResultadoDTO> CrearAsistenciaAsync(AsistenciaCrearDTO asistencia)

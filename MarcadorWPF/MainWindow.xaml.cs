@@ -27,7 +27,6 @@ namespace MarcadorWPF
         private const int DPFJ_PROBABILITY_ONE = 0x7fffffff;
         private Reader _reader = null;
         private Fmd _ultimoTemplate;
-        private HttpClient _httpClient;
         private readonly ApiClient _apiClient;
 
         // Umbral típico de aceptación
@@ -37,7 +36,6 @@ namespace MarcadorWPF
         {
             InitializeComponent();
             _apiClient = new ApiClient("https://localhost:7084/");
-            _httpClient = new HttpClient();
             txtFechaActual.Text = DateTime.Now.ToString("dddd, d 'de' MMMM 'de' yyyy",
         new System.Globalization.CultureInfo("es-ES"));
             // Mostrar la hora inmediatamente al iniciar
@@ -119,15 +117,14 @@ namespace MarcadorWPF
 
             try
             {
-                string url = "https://localhost:7084/api/Huellas/listar";
-                var json = await _httpClient.GetStringAsync(url);
-                var huellas = JsonConvert.DeserializeObject<List<HuellaRespuestaDTO>>(json);
+                var huellas = await _apiClient.ListarHuellasAsync();
 
-                if (huellas == null)
+                if (huellas == null || huellas.Count == 0)
                 {
                     Log("No se pudo obtener la lista de huellas desde la API.");
                     return;
                 }
+
 
                 bool matchFound = false;
 
