@@ -54,7 +54,7 @@
                             FontWeight="SemiBold"
                             Foreground="White"
                             IsReadOnly="True"
-                            Text="Esperando huella..."
+                            Text="Esperando huella dactilar..."
                             TextWrapping="Wrap"
                             VerticalScrollBarVisibility="Auto" />
                     </Border>
