@@ -32,10 +32,18 @@ namespace MarcadorWPF
         // Umbral típico de aceptación
         private readonly int _targetFmr = DPFJ_PROBABILITY_ONE / 100000;
 
+        private readonly ImageSource _defaultFingerImage;
+        private readonly ImageSource _defaultPersonaImage;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            _defaultFingerImage = imgFinger.Source;
+            _defaultPersonaImage = imgPersona.Source;
+
             _apiClient = new ApiClient("https://localhost:7084/");
+
             txtFechaActual.Text = DateTime.Now.ToString("dddd, d 'de' MMMM 'de' yyyy",
         new System.Globalization.CultureInfo("es-ES"));
             // Mostrar la hora inmediatamente al iniciar
@@ -166,7 +174,7 @@ namespace MarcadorWPF
                                     esEntrada = true
                                 };
 
-                                BitmapImage bitmap = null;
+                                ImageSource bitmap = null;
                                 if (h.Foto != null && h.Foto.Length > 0)
                                 {
                                     using (MemoryStream ms = new MemoryStream(h.Foto))
@@ -180,7 +188,11 @@ namespace MarcadorWPF
                                         bitmap = tmp;
                                     }
                                 }
-
+                                else
+                                {
+                                    bitmap = _defaultPersonaImage;
+                                }
+                                
                                 // 2️⃣ Dispatcher SOLO para actualizar la UI
                                 await Application.Current.Dispatcher.InvokeAsync(() =>
                                 {
@@ -241,6 +253,7 @@ namespace MarcadorWPF
                                         Log($"ℹ {resultado.Mensaje}");
                                     }
                                 }
+                                _ = ResetearImagenesDespuesDeUnRatitoAsync();
 
                                 break;
 
@@ -261,6 +274,7 @@ namespace MarcadorWPF
                 if (!matchFound)
                 {
                     Log("❌ Huella no encontrada en la base de datos.");
+                    _ = ResetearImagenesDespuesDeUnRatitoAsync();
                 }
             }
             catch (Exception ex)
@@ -328,5 +342,27 @@ namespace MarcadorWPF
         {
             Application.Current.Shutdown();
         }
+
+        private async Task ResetearImagenesDespuesDeUnRatitoAsync()
+        {
+            // Esperar 2 segundos
+            await Task.Delay(2000);
+
+            await Dispatcher.InvokeAsync(() =>
+            {
+                imgFinger.Source = _defaultFingerImage;
+                imgPersona.Source = _defaultPersonaImage;
+                // Si quieres también puedes limpiar textos, por ejemplo:
+                txtTipoMarcacion.Text = "-";
+                txtTiempoTrabajado.Text = "-";
+                txtNombreCompleto.Text = "-";
+                txtCarnetIdentidad.Text = "-";
+                txtFechaRegistrada.Text = "-";
+                txtCargo.Text = "-";
+                txtHoraRegistrada.Text = "-";
+                txtTipoMarcacion.Text= "-";
+            });
+        }
+
     }
 }

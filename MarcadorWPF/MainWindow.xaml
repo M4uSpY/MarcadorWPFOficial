@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="MainWindow"
     Width="830"
-    Height="490"
+    Height="510"
     AllowsTransparency="True"
     Background="Transparent"
     Loaded="Window_Loaded"
@@ -22,7 +22,7 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="294" />
+                <ColumnDefinition Width="300" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
@@ -50,7 +50,7 @@
                             AcceptsReturn="True"
                             Background="Transparent"
                             BorderThickness="0"
-                            FontSize="16"
+                            FontSize="12"
                             FontWeight="SemiBold"
                             Foreground="White"
                             IsReadOnly="True"
@@ -88,20 +88,14 @@
                     HorizontalAlignment="Center"
                     Orientation="Horizontal">
                     <Image
-                        Width="100"
+                        Width="200"
                         Height="auto"
                         Margin="10,0,5,0"
                         RenderOptions.BitmapScalingMode="HighQuality"
-                        Source="/Images/Logo_Cooperativa.png" />
-                    <Image
-                        Width="100"
-                        Height="auto"
-                        Margin="10,0,0,0"
-                        RenderOptions.BitmapScalingMode="HighQuality"
-                        Source="/Images/iconSoft.png" />
+                        Source="/Images/LogoCooperativaFinal.png" />
                 </StackPanel>
 
-                <StackPanel Margin="30,50,0,0" HorizontalAlignment="Center">
+                <StackPanel Margin="30,10,0,0" HorizontalAlignment="Center">
                     <TextBlock
                         x:Name="txtFechaActual"
                         FontSize="18"
@@ -130,14 +124,20 @@
                         Height="230"
                         Margin="0,0,6,0"
                         CornerRadius="10">
-                        <Image x:Name="imgFinger" Margin="10" />
+                        <Image
+                            x:Name="imgFinger"
+                            Margin="10"
+                            Source="/Images/HuellaDefault.jpg" />
                     </Border>
                     <Border
                         Width="230"
                         Height="230"
                         Margin="0,0,6,0"
                         CornerRadius="10">
-                        <Image x:Name="imgPersona" Margin="10" />
+                        <Image
+                            x:Name="imgPersona"
+                            Margin="10"
+                            Source="/Images/PersonaDefault.png" />
                     </Border>
                 </StackPanel>
 
@@ -185,7 +185,7 @@
                             FontSize="18"
                             FontWeight="Bold"
                             Foreground="White"
-                            Text="Nombre completo"
+                            Text="-"
                             TextTrimming="CharacterEllipsis" />
 
                         <!--  FILA 1: CI / Fecha  -->
@@ -206,7 +206,7 @@
                                 FontSize="15"
                                 FontWeight="Bold"
                                 Foreground="White"
-                                Text="CI" />
+                                Text="-" />
                         </StackPanel>
 
                         <StackPanel
@@ -226,7 +226,7 @@
                                 FontSize="15"
                                 FontWeight="Bold"
                                 Foreground="White"
-                                Text="Fecha Registrada" />
+                                Text="-" />
                         </StackPanel>
 
                         <!--  FILA 2: Cargo / Hora  -->
@@ -247,7 +247,7 @@
                                 FontSize="15"
                                 FontWeight="Bold"
                                 Foreground="White"
-                                Text="Cargo" />
+                                Text="-" />
                         </StackPanel>
 
                         <StackPanel
@@ -267,7 +267,7 @@
                                 FontSize="15"
                                 FontWeight="Bold"
                                 Foreground="White"
-                                Text="Hora Registrada" />
+                                Text="-" />
                         </StackPanel>
 
                         <!--  FILA 3: Tipo (ENTRADA / SALIDA) dinámico  -->

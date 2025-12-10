@@ -18,6 +18,8 @@ namespace MarcadorWPF.Services
             _http = new HttpClient();
             _http.BaseAddress = new Uri(baseUrl);
             _http.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+            _http.DefaultRequestHeaders.Add("X-Marcador-Key", "MI_SUPER_CLAVE_MUY_LARGA_Y_RARA_123_ABC_XYZasdfasdfasdfadsfadsfadsfadsf");
         }
 
         public async Task<List<HuellaRespuestaDTO>> ListarHuellasAsync()
